@@ -61,10 +61,24 @@ def _encode(code_type: int, timings: Iterable[float], repeat: int = 0) -> bytes:
     return header + pulses + TERMINATOR
 
 
+def to_pulse_magnitudes(timings: Iterable[float]) -> list[float]:
+    """Return the magnitudes of Home Assistant building-block timings.
+
+    The ``infrared`` and ``radio_frequency`` platforms encode a space (emitter
+    off) as a *negative* duration and a mark (emitter on) as positive. The wire
+    format here is magnitude-only — marks and spaces alternate by position — so
+    emitters normalise with this before encoding, mirroring core Broadlink's
+    ``pulses = [abs(t) for t in timings]``.
+    """
+    return [abs(t) for t in timings]
+
+
 def encode_ir(timings: Iterable[float], repeat: int = 0) -> bytes:
     """Encode IR pulse timings (microseconds) for ``send_data``.
 
-    Carrier frequency is fixed by the hardware and ignored.
+    Timings must be non-negative magnitudes; pass building-block timings through
+    :func:`to_pulse_magnitudes` first. Carrier frequency is fixed by the
+    hardware and ignored.
     """
     return _encode(CODE_IR, timings, repeat)
 

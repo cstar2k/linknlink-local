@@ -44,7 +44,7 @@ class LinknLinkInfraredEmitter(LinknLinkEntity, InfraredEmitterEntity):
         self._attr_unique_id = f"{coordinator.api.mac.hex()}-infrared"
 
     async def async_send_command(self, command: InfraredCommand) -> None:
-        timings = list(command.get_raw_timings())
+        timings = codec.to_pulse_magnitudes(command.get_raw_timings())
         if not timings:
             raise HomeAssistantError("Infrared command has no timings")
         blob = codec.encode_ir(timings)

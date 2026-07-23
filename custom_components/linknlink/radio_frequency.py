@@ -71,7 +71,7 @@ class LinknLinkRadioFrequencyTransmitter(LinknLinkEntity, RadioFrequencyTransmit
                 f"Unsupported modulation {command.modulation!r}; "
                 "LinknLink hardware is OOK-only"
             )
-        timings = list(command.get_raw_timings())
+        timings = codec.to_pulse_magnitudes(command.get_raw_timings())
         if not timings:
             raise HomeAssistantError("Radio frequency command has no timings")
         try:

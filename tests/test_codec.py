@@ -77,8 +77,25 @@ def test_round_trip_rf():
 
 
 def test_negative_pulse_rejected():
+    # encode_* stays strict: magnitudes only. Callers normalise first.
     with pytest.raises(ValueError):
         codec.encode_ir([-1])
+
+
+def test_to_pulse_magnitudes_makes_spaces_positive():
+    # Building-block timings use negative values for spaces (emitter off).
+    signed = [9000, -4500, 562, -562, 562, -1687]
+    assert codec.to_pulse_magnitudes(signed) == [9000, 4500, 562, 562, 562, 1687]
+
+
+def test_signed_command_encodes_via_magnitudes():
+    # A command as the infrared building block delivers it (marks positive,
+    # spaces negative) must encode once normalised, and round-trip in magnitude.
+    signed = [1260, -400, 420, -1260, 1260, -400]
+    blob = codec.encode_ir(codec.to_pulse_magnitudes(signed))
+    _, _, decoded = codec.decode(blob)
+    for original, got in zip((1260, 400, 420, 1260, 1260, 400), decoded):
+        assert abs(got - original) <= int(codec.TICK_US) + 1
 
 
 def test_zero_pulse_clamped_to_one_tick():
