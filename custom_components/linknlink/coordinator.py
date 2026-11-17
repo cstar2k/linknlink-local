@@ -1,6 +1,7 @@
 """LinknLink Coordinator."""
 from __future__ import annotations
 
+import asyncio
 from contextlib import suppress
 from datetime import timedelta
 from functools import partial
@@ -40,6 +41,7 @@ class LinknLinkCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             name=f"{DOMAIN}-{mac}",
             update_interval=timedelta(seconds=30),
         )
+        self.learning_lock = asyncio.Lock()
         self.fw_version: int | None = None
         self.authorized: bool | None = None
 

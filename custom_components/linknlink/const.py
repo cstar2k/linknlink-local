@@ -22,6 +22,7 @@ DOMAINS_AND_TYPES: dict[str, set[str]] = {
     Platform.SENSOR: {"EHUB", "ETHS"},
     Platform.BINARY_SENSOR: {"EHUB", "EMOTION"},
     Platform.BUTTON: {"EHUB", "EREMOTE"},
+    Platform.SWITCH: {"EHUB", "EREMOTE"},
     PLATFORM_INFRARED: {"EHUB", "EREMOTE"},
     PLATFORM_RADIO_FREQUENCY: {"EHUB", "EREMOTE"},
 }

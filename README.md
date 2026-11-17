@@ -313,3 +313,22 @@ script:
 ## Sensor
 
 The `sensor` entities allow you to monitor LinknLink sensors. These entities are created automatically when you configure a device that has sensors.
+
+## Infrared receiver support
+
+This fork adds a native IR receiver and an IR Capture switch for each eRemote.
+HAIR discovers the receivers automatically. Select the receiver and start Listen,
+then press one button on the original remote. The window closes after one signal
+or after 30 seconds, and can also be closed with the capture switch.
+
+The receiver and remote.learn_command share a learning lock so two capture
+sessions cannot consume each other's signal. Carrier frequency is unknown for
+learned signals because the hardware does not report it.
+
+Receiver discovery, capture start/stop, and the timeout were checked on two
+eRemotes. The packet decoder was validated against 20 hardware captures.
+Physical reception and replay through the native receiver still need an in-room test.
+
+Install and update this fork through Home Assistant Marketplace using the custom
+repository cstar2k/linknlink-local. Updates from this repository include the receiver
+adapter. Restart Home Assistant after installing integration code changes.

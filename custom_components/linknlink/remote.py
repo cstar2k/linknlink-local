@@ -122,7 +122,7 @@ class LinknLinkRemote(LinknLinkEntity, RemoteEntity, RestoreEntity):
         self._storage_loaded = False
         self._codes = {}
         self._flags = defaultdict(int)
-        self._lock = asyncio.Lock()
+        self._lock = coordinator.learning_lock
 
         self._attr_is_on = True
         self._attr_supported_features = (

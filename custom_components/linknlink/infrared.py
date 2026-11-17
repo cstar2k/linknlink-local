@@ -17,6 +17,7 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import codec
+from .ir_receiver import LinknLinkInfraredReceiver
 from .const import DOMAIN
 from .coordinator import LinknLinkCoordinator
 from .entity import LinknLinkEntity
@@ -31,7 +32,9 @@ async def async_setup_entry(
 ) -> None:
     """Set up the LinknLink infrared emitter."""
     coordinator: LinknLinkCoordinator = hass.data[DOMAIN][config_entry.entry_id]
-    async_add_entities([LinknLinkInfraredEmitter(coordinator)], False)
+    receiver = LinknLinkInfraredReceiver(coordinator)
+    coordinator.ir_receiver = receiver
+    async_add_entities([LinknLinkInfraredEmitter(coordinator), receiver], False)
 
 
 class LinknLinkInfraredEmitter(LinknLinkEntity, InfraredEmitterEntity):
